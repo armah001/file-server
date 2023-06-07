@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Index() {
     return (
-        <div className="bg-gradient-to-r from-lime-100 to-cyan-100">
+        <div className="bg-gradient-to-r from-pink-200 to-gray-100">
             <div className="isolate">
                 <div className="px-6 pt-6 lg:px-8">
                     <nav className="flex items-center justify-between" aria-label="Global">
@@ -27,8 +27,8 @@ export default function Index() {
                             <a href="/#" className="text-sm font-semibold leading-6 text-gray-900">Company</a>
                         </div>
                         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                            <a href="/doctor/login" className="text-sm font-semibold leading-6 text-gray-900">
-                                Doctor Login
+                            <a href="/admin/login" className="text-sm font-semibold leading-6 text-gray-900">
+                                Admin Login
                                 <span aria-hidden="true">
                                     &rarr;
                                 </span>
@@ -47,7 +47,7 @@ export default function Index() {
                                     A self service platform that to help you find the best ivitation cards online.
                                 </p>
                                 <div className="mt-10 flex items-center justify-center gap-x-6">
-                                    <a href="/patient/signup"
+                                    <a href="/customer/signup"
                                         className="rounded-md bg-sky-400 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400">
                                         Get started
                                     </a>
@@ -109,7 +109,7 @@ export default function Index() {
                     <span className="footer-title">Company</span>
                     <a href='/#' className="link link-hover">About us</a>
                     <a href='/#' className="link link-hover">Contact</a>
-                    <a href='/doctor/signup' className="link link-hover">Admin Sign Up</a>
+                    <a href='/admin/SignUp' className="link link-hover">Admin Sign Up</a>
                 </div>
                 <div>
                     <span className="footer-title">Legal</span>

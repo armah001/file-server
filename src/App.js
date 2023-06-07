@@ -1,24 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import NoPage from './pages/NoPage.tsx';
+import Index from './pages/Index.tsx';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Signup from './customer/pages/Signup';
+import Login from './customer/pages/Login';
+import AdminSignUp from './admin/pages/SignUp';
+import AdminLogin from './admin/pages/Login';
+import Dashboard from './admin/pages/Dasboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/file-server" element={<Index/>} />
+        <Route index element={<Index/>} />
+        <Route path="/customer/signup" element= {<Signup/>}/>
+        <Route path="/customer/login" element={<Login/>}/>
+        <Route path="/admin/login" element={<AdminLogin/>}/>
+        <Route path="/admin/SignUp" element={<AdminSignUp/>}/>
+        <Route path="/admin/Dashboard" element={<Dashboard/>}/>
+        <Route path="*" element={<NoPage/>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
