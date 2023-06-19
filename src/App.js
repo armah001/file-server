@@ -7,6 +7,7 @@ import Login from './customer/pages/Login';
 import AdminSignUp from './admin/pages/SignUp';
 import AdminLogin from './admin/pages/Login';
 import Dashboard from './admin/pages/Dasboard';
+import CustomerHome from './customer/pages/CustomerHome';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin/>}/>
         <Route path="/admin/SignUp" element={<AdminSignUp/>}/>
         <Route path="/admin/Dashboard" element={<Dashboard/>}/>
+        <Route path="/cusomer/CustomerHome" element={<CustomerHome/>}/>
         <Route path="*" element={<NoPage/>} />
       </Routes>
     </BrowserRouter>

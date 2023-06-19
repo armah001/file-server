@@ -1,15 +1,52 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate} from 'react-router-dom';
+const BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
 const FormAutofill: React.FC = () => {
   const navigate = useNavigate();
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [response, setResponse] = useState<Record<string, any>>({});
   
   const [formData, setFormData] = useState({});
   const [error, setError] = useState<string | null>('');
   const [showModal, setShowModal] = useState(true);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSignup = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try{
+        console.log(JSON.stringify(formData))
+        const response = await fetch(`${BASE_URL}/customer/signup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        });
+        if (response.ok) {
+            const token = await response.text();
+            localStorage.setItem("customerAuthSignUpToken", token);
+            navigate('/customer/login');
+        }
+    } catch(error) {
+        setError("Sign up failed: " + error);
+    }
+};
+
+useEffect(() => {
+  let timeoutId:any = null;
+
+  if (error) {
+    timeoutId = setTimeout(() => {
+      setError(null);
+    }, 1000);
+  }
+
+  return () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+}, [error]);
 
   const hideModel = () => {
     setShowModal(false);
@@ -68,15 +105,16 @@ const FormAutofill: React.FC = () => {
       <div className="flex h-screen  bg-gradient-to-r from-pink-200 to-gray-100">
         
         <div className="w-3/4 flex items-center justify-center h-screen">
-          <form className="w-3/4 space-y-4 bg-white shadow-md rounded px-10 pt-6 pb-8 mb-4 flex flex-col my-2">
+          <form method="post" onSubmit={handleSignup} className="w-3/4 space-y-4 bg-white shadow-md rounded px-10 pt-6 pb-8 mb-4 flex flex-col my-2">
             
             <div className="flex space-x-4">
               <label className="w-1/2 block text-gray-700 text-sm font-bold">
                 Full Name
                 <input
                   type="text"
+                  onChange={handleChange}
                   name="Full Name"
-                  defaultValue={response["Name"]}
+                  placeholder="Type here"
   
                   className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
@@ -86,8 +124,9 @@ const FormAutofill: React.FC = () => {
                 Email
                 <input
                   type="text"
+                  onChange={handleChange}
                   name="Email"
-                  defaultValue={response["Email"]}
+                  placeholder="Type here"
                   className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
               </label>
@@ -99,8 +138,9 @@ const FormAutofill: React.FC = () => {
                 Password
                 <input
                   type="password"
+                  onChange={handleChange}
                   name="password"
-                  defaultValue={response["password"]}
+                  placeholder="Type here"
                   
                   className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
@@ -116,11 +156,11 @@ const FormAutofill: React.FC = () => {
                       </button>
                   </Link>
 
-                  <Link to="/customer/login"> 
-                    <button className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="submit">
+                  
+                    <button onClick={handleSignup} className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="submit">
                         SignUp
                     </button>
-                  </Link>
+                  
               </div>
             </div>
           </form>

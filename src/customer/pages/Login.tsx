@@ -57,9 +57,11 @@ export default function Login() {
                                         </button>
                                     </Link>
 
-                                    <button className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button">
-                                        Login
-                                    </button>
+                                    <Link to="/cusomer/CustomerHome">
+                                        <button className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button">
+                                            Login
+                                        </button>
+                                    </Link>
                                 </div>
                                 <div className="md:w-2/3"></div>
                             </div>

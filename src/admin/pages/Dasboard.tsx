@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import File from '../../interfaces/File';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<string>('John Doe');
@@ -13,6 +15,8 @@ const Dashboard: React.FC = () => {
     downloads: 0,
     emailsSent: 0,
   });
+
+  const navigate = useNavigate();
 
   const handleUpload = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -53,9 +57,30 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleLogout = () => {
+    setUser('');
+    navigate('/file-server'); // Redirect to the homepage
+  };
+
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Welcome, {user}</h2>
+      <div className="flex justify-between items-center bg-gray-300 p-4 mb-4">
+        <button
+          className="text-blue-500 hover:text-blue-700 font-bold"
+          onClick={() => navigate('/file-server')}
+        >
+          Home
+        </button>
+        <h2 className="text-2xl font-bold">Welcome, {user}</h2>
+        <div>
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
       <h3 className="text-xl font-bold mb-2">Files Uploaded: {files.length}</h3>
       <div className="mb-4">
         <button
