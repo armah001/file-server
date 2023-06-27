@@ -33,8 +33,10 @@ const CustomerHome: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    // Perform logout logic here
-    navigate('/customer/login');
+      localStorage.removeItem("customerAuthLoginToken");
+      localStorage.removeItem("customerAuthSignUpToken");
+      window.location.reload();
+      // navigate('/customer/login');
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +84,7 @@ const CustomerHome: React.FC = () => {
                 className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <ul>
+            {/* <ul>
               {filteredFiles.map((file) => (
                 <li key={file.id} className="mb-2">
                   <div>
@@ -97,7 +99,7 @@ const CustomerHome: React.FC = () => {
                   </div>
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>

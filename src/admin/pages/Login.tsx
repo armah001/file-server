@@ -12,6 +12,41 @@ export default function AdminLogin() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try{
+            const response = await fetch(`${BASE_URL}/admin/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem("adminAuthLoginToken", token);
+                navigate('/admin/dashboard');
+            }
+        } catch(error) {
+            // console.error("Login failed");
+            // console.error(error);
+            setError("Login failed" + error);
+        }
+
+    };
+    useEffect(() => {
+        let timeoutId:any = null;
+    
+        if (error) {
+          timeoutId = setTimeout(() => {
+            setError(null);
+          }, 1000);
+        }
+    
+        return () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+        };
+      }, [error]);
 
     return (
 
@@ -55,11 +90,11 @@ export default function AdminLogin() {
                                         </button>
                                     </Link>
 
-                                    <Link to="/admin/Dashboard">
-                                        <button className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button">
+                                    
+                                        <button onClick={handleLogin} className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button">
                                             Login
                                         </button>
-                                    </Link>
+                                    
                                 </div>
                                 <div className="md:w-2/3"></div>
                             </div>

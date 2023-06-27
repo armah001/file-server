@@ -11,6 +11,40 @@ export default function AdminSignUp() {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSignup = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try{
+            console.log(JSON.stringify(formData))
+            const response = await fetch(`${BASE_URL}/admin/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem("adminAuthSignUpToken", token);
+                navigate('/admin/login');
+            }
+        } catch(error) {
+            setError("Sign up failed: " + error);
+        }
+    };
+    useEffect(() => {
+        let timeoutId:any = null;
+    
+        if (error) {
+          timeoutId = setTimeout(() => {
+            setError(null);
+          }, 1000);
+        }
+    
+        return () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+        };
+      }, [error]);
+
     return (
         <div>
             {error && (
@@ -60,11 +94,11 @@ export default function AdminSignUp() {
                                             </button>
                                         </Link>
 
-                                        <Link to="/admin/login"> 
-                                            <button className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="submit">
+                                        
+                                            <button onClick={handleSignup} className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="submit">
                                                 SignUp
                                             </button>
-                                        </Link>
+                                        
                                     </div>
                                     </div>
                         </div>
