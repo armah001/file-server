@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+const BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
 export default function Login() {
     const navigate = useNavigate();
@@ -12,6 +12,45 @@ export default function Login() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try{
+            console.log(formData)
+            const response = await fetch(`${BASE_URL}/customer/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json"
+                             },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem("customerAuthLoginToken", token);
+                navigate('/cusomer/CustomerHome');
+            }
+        } catch(error) {
+            
+            setError("Login failed" + error);
+        }
+
+    };
+
+    useEffect(() => {
+        let timeoutId:any = null;
+    
+        if (error) {
+          timeoutId = setTimeout(() => {
+            setError(null);
+          }, 1000);
+        }
+    
+        return () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+        };
+      }, [error]);
+
 
     return (
 
@@ -57,11 +96,11 @@ export default function Login() {
                                         </button>
                                     </Link>
 
-                                    <Link to="/cusomer/CustomerHome">
-                                        <button className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button">
+                                    
+                                        <button onClick={handleLogin} className="shadow bg-sky-400 hover:bg-sky-600 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button">
                                             Login
                                         </button>
-                                    </Link>
+                                    
                                 </div>
                                 <div className="md:w-2/3"></div>
                             </div>

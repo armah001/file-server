@@ -51,7 +51,7 @@ export default function Index() {
                                         className="rounded-md bg-sky-400 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400">
                                         Get started
                                     </a>
-                                    <a href="/#" className="text-base font-semibold leading-7 text-gray-900">Learn more <span aria-hidden="true">→</span></a>
+                                    <a href="/customer/login" className="text-base font-semibold leading-7 text-gray-900">Log In <span aria-hidden="true">→</span></a>
                                 </div>
                             </div>
                         </div>

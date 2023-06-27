@@ -28,6 +28,8 @@ const FormAutofill: React.FC = () => {
             navigate('/customer/login');
         }
     } catch(error) {
+        console.error("Login failed");
+        console.error(error);
         setError("Sign up failed: " + error);
     }
 };
@@ -113,7 +115,7 @@ useEffect(() => {
                 <input
                   type="text"
                   onChange={handleChange}
-                  name="Full Name"
+                  name="fullName"
                   placeholder="Type here"
   
                   className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
@@ -125,7 +127,7 @@ useEffect(() => {
                 <input
                   type="text"
                   onChange={handleChange}
-                  name="Email"
+                  name="email"
                   placeholder="Type here"
                   className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
