@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import NavBar from '../../components/Navbar';
 
 interface File {
   id: number;
@@ -10,7 +10,7 @@ interface File {
 }
 
 const CustomerHome: React.FC = () => {
-  const navigate = useNavigate();
+  
   const [files, setFiles] = useState<File[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -32,12 +32,6 @@ const CustomerHome: React.FC = () => {
     fetchFiles();
   }, []);
 
-  const handleLogout = () => {
-      localStorage.removeItem("customerAuthLoginToken");
-      localStorage.removeItem("customerAuthSignUpToken");
-      window.location.reload();
-      // navigate('/customer/login');
-  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -50,26 +44,10 @@ const CustomerHome: React.FC = () => {
 
   return (
     <div className='h-screen overflow-auto'>
-      <div className="flex justify-between items-center bg-gray-300 p-4 mb-4">
-        <button
-          className="text-blue-500 hover:text-blue-700 font-bold"
-          onClick={() => navigate('/file-server')}
-        >
-          Home
-        </button>
-
-        <div>
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
       <div className='px-10'>
         <div className="bg-white shadow-lg rounded-lg p-6 w-full mt-5">
           <div>
+            <NavBar/>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-medium text-gray-900 mb-4 capitalize">
                 Welcome Back,
@@ -84,7 +62,7 @@ const CustomerHome: React.FC = () => {
                 className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            {/* <ul>
+            <ul>
               {filteredFiles.map((file) => (
                 <li key={file.id} className="mb-2">
                   <div>
@@ -99,7 +77,7 @@ const CustomerHome: React.FC = () => {
                   </div>
                 </li>
               ))}
-            </ul> */}
+            </ul>
           </div>
         </div>
       </div>
