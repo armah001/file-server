@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import File from '../../interfaces/File';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import NavBar from '../../components/Navbar';
 
 const Dashboard: React.FC = () => {
-  const [user, setUser] = useState<string>('John Doe');
+  // const [user, setUser] = useState<string>('John Doe');
   const [files, setFiles] = useState<File[]>([]);
   const [uploadModalOpen, setUploadModalOpen] = useState<boolean>(false);
   const [newFile, setNewFile] = useState<File>({
@@ -16,7 +16,7 @@ const Dashboard: React.FC = () => {
     emailsSent: 0,
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleUpload = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -57,10 +57,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    setUser('');
-    navigate('/file-server'); // Redirect to the homepage
-  };
+  // const handleLogout = () => {
+  //   // setUser('');
+  //   navigate('/file-server'); // Redirect to the homepage
+  // };
 
   return (
     <div className="container mx-auto p-4">
