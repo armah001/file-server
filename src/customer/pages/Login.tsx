@@ -84,7 +84,7 @@ export default function Login() {
                                     <p className="text-grey-dark text-xs italic">Please use a secure password</p>
                                     <span className='text-black text-xs font-medium'>Don't have an account?  <a href='/customer/signup' className='underline'> Sign Up </a></span>
                                     <br></br>
-                                    <span className='text-black text-xs font-medium'>Forgotten your password?  <a href='#' className='underline'> Reset Password </a></span>
+                                    {/* <span className='text-black text-xs font-medium'>Forgotten your password?  <a href='#' className='underline'> Reset Password </a></span> */}
                                 </div>
                             </div>
 
