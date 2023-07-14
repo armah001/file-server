@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import File from '../../interfaces/File';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import NavBar from '../../components/Navbar';
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<string>('John Doe');
@@ -64,23 +64,11 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center bg-gray-300 p-4 mb-4">
-        <button
-          className="text-blue-500 hover:text-blue-700 font-bold"
-          onClick={() => navigate('/file-server')}
-        >
-          Home
-        </button>
-        <h2 className="text-2xl font-bold">Welcome, {user}</h2>
-        <div>
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+      
+      <NavBar/>
+
+      {/* main body of the page */}
+
       <h3 className="text-xl font-bold mb-2">Files Uploaded: {files.length}</h3>
       <div className="mb-4">
         <button
