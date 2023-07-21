@@ -1,71 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import File from '../../interfaces/File';
-// import { useNavigate } from 'react-router-dom';
 import NavBar from '../../components/Navbar';
 
+const BASE_URL = process.env.REACT_APP_BASE_API_URL;
+
+interface File {
+  id: number;
+  filename: string;
+  fileType: string;
+  description: string;
+}
+
 const Dashboard: React.FC = () => {
-  // const [user, setUser] = useState<string>('John Doe');
   const [files, setFiles] = useState<File[]>([]);
   const [uploadModalOpen, setUploadModalOpen] = useState<boolean>(false);
   const [newFile, setNewFile] = useState<File>({
     id: 1,
-    title: '',
+    filename: '',
+    fileType: '',
     description: '',
-    downloads: 0,
-    emailsSent: 0,
   });
 
-  // const navigate = useNavigate();
+  useEffect(() => {
+    // Fetch files from the server or API
+    const fetchFiles = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/document/get`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch files');
+        }
+        const data = await response.json();
+        setFiles(data);
+      } catch (error) {
+        console.log('Error fetching files:', error);
+      }
+    };
 
-  const handleUpload = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    fetchFiles();
+  }, []);
+
+  const handleUpload = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
     const file = fileInput?.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFiles(prevFiles => [
-          ...prevFiles,
-          { ...newFile, title: newFile.title, description: newFile.description },
-        ]);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('description', newFile.description)
+
+      try {
+        const response = await fetch(`${BASE_URL}/document/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to upload file');
+        }
+
+        const data = await response.json();
+        setFiles(prevFiles => [...prevFiles, data]);
         setNewFile({
           id: newFile.id + 1,
-          title: '',
+          filename: '',
+          fileType: '',
           description: '',
-          downloads: 0,
-          emailsSent: 0,
         });
         setUploadModalOpen(false);
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.log('Error uploading file:', error);
+      }
     }
   };
 
   const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewFile((prevFile) => ({
-          ...prevFile,
-          title: file.name,
-          // You can set other properties like file size, type, etc.
-        }));
-      };
-      reader.readAsDataURL(file);
+      setNewFile((prevFile) => ({
+        ...prevFile,
+        filename: file.name,
+        fileType: file.type,
+        description: '', // Initialize description as an empty string
+      }));
     }
   };
 
-  // const handleLogout = () => {
-  //   // setUser('');
-  //   navigate('/file-server'); // Redirect to the homepage
-  // };
-
   return (
     <div className="container mx-auto p-4">
-      
-      <NavBar/>
+      <NavBar />
 
       {/* main body of the page */}
 
@@ -83,16 +105,16 @@ const Dashboard: React.FC = () => {
         <thead>
           <tr>
             <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Downloads</th>
-            <th className="px-4 py-2">Emails Sent</th>
+            <th className="px-4 py-2">File Type</th>
           </tr>
         </thead>
         <tbody>
           {files.map(file => (
             <tr key={file.id}>
-              <td className="border px-4 py-2">{file.title}</td>
-              <td className="border px-4 py-2">{file.downloads}</td>
-              <td className="border px-4 py-2">{file.emailsSent}</td>
+              <td className="border px-4 py-2">{file.filename}</td>
+              <td className="border px-4 py-2">{file.fileType}</td>
+              <td className="border px-4 py-2">{file.description}</td>
+              <td className="border px-4 py-2">{"Downloads"}</td>
             </tr>
           ))}
         </tbody>
@@ -127,14 +149,24 @@ const Dashboard: React.FC = () => {
           Title:
           <input
             type="text"
-            value={newFile.title}
-            onChange={(e) => setNewFile({ ...newFile, title: e.target.value })}
+            value={newFile.filename}
+            onChange={(e) => setNewFile({ ...newFile, filename: e.target.value })}
             className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
           />
         </label>
         <label className="block">
-          Description:
-          <textarea
+          File Type:
+          <input
+            type="text"
+            value={newFile.fileType}
+            onChange={(e) => setNewFile({ ...newFile, fileType: e.target.value })}
+            className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
+          />
+        </label>
+        <label className="block">
+          File Description:
+          <input
+            type="text"
             value={newFile.description}
             onChange={(e) => setNewFile({ ...newFile, description: e.target.value })}
             className="mt-1 p-2 block w-full rounded-md bg-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"

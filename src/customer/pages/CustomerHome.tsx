@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../../components/Navbar';
 
+const BASE_URL = process.env.REACT_APP_BASE_API_URL;
+
 interface File {
   id: number;
-  title: string;
+  filename: string;
+  fileType: string;
+  data: string; // Assuming data is a string representing file content or some URL
   description: string;
-  downloads: number;
-  emailsSent: number;
 }
 
 const CustomerHome: React.FC = () => {
-  
   const [files, setFiles] = useState<File[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Simulated data fetch or API call
   useEffect(() => {
-    // Fetch files from the server or API
-    // Update the 'files' state with the response
     const fetchFiles = async () => {
       try {
-        // Simulated data
-        const response = await fetch('https://api.example.com/files');
+        const response = await fetch(`${BASE_URL}/document/get`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch files');
+        }
         const data = await response.json();
         setFiles(data);
       } catch (error) {
@@ -32,22 +32,24 @@ const CustomerHome: React.FC = () => {
     fetchFiles();
   }, []);
 
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filter files based on the search term
   const filteredFiles = files.filter((file) =>
-    file.title.toLowerCase().includes(searchTerm.toLowerCase())
+    file.filename.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handlePreview = (url: string) => {
+    window.open(url, '_blank');
+  };
 
   return (
     <div className='h-screen overflow-auto'>
       <div className='px-10'>
         <div className="bg-white shadow-lg rounded-lg p-6 w-full mt-5">
           <div>
-            <NavBar/>
+            <NavBar />
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-medium text-gray-900 mb-4 capitalize">
                 Welcome Back,
@@ -66,14 +68,22 @@ const CustomerHome: React.FC = () => {
               {filteredFiles.map((file) => (
                 <li key={file.id} className="mb-2">
                   <div>
-                    <h3 className="text-lg font-medium">{file.title}</h3>
-                    <p className="text-sm text-gray-500">{file.description}</p>
+                    <h3 className="text-lg font-medium">{file.filename}</h3>
+                    <p className="text-sm text-gray-500">{file.fileType}</p>
                     <div className="text-sm text-gray-500">
-                      Downloads: {file.downloads}, Emails Sent: {file.emailsSent}
+                      ID: {file.id}
                     </div>
-                    <a href={`/file-server/files/${file.id}`} className="text-blue-500 hover:underline">
-                      Download
-                    </a>
+                    <div>
+                      <button
+                        onClick={() => handlePreview(file.data)}
+                        className="text-blue-500 hover:underline mr-2"
+                      >
+                        Preview
+                      </button>
+                      <a href={file.data} className="text-blue-500 hover:underline">
+                        Download
+                      </a>
+                    </div>
                   </div>
                 </li>
               ))}

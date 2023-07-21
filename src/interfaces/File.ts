@@ -1,14 +1,9 @@
 
 interface File {
-    // recordId:number;
-    // title: string;
-    // description: string;
-
     id: number;
-  title: string;
-  description: string;
-  downloads: number;
-  emailsSent: number;
+    filename: string;
+    fileType: string;
+    data: string; // Represented as Base64 encoded string
   }
 
 export default File;
