@@ -7,7 +7,7 @@ export default function NavBar() {
         localStorage.removeItem("adminAuthSignUpToken");
         localStorage.removeItem("customerAuthSignUpToken");
         localStorage.removeItem("customerAuthLoginToken");
-        window.location.reload();
+        window.location.href="/file-server";
       };
 
   return (
